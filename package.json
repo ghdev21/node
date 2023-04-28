@@ -1,0 +1,22 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "The repo for the nodejs course",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ghdev21/node.git"
+  },
+  "author": "Andrii Yaremenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ghdev21/node/issues"
+  },
+  "homepage": "https://github.com/ghdev21/node#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
