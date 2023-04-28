@@ -16,3 +16,6 @@ out/
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
+
+# Ignore WebStorm related files
+.idea/
