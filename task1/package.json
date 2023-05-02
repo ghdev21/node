@@ -4,7 +4,7 @@
   "description": "The repo for the nodejs course",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js"
+    "server": "../node_modules/.bin/nodemon index.js"
   },
   "repository": {
     "type": "git",
