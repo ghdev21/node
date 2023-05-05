@@ -37,7 +37,6 @@ const getTopProcess = (command, formatData) => new Promise((resolve, reject) => 
             reject(error);
             return;
         }
-
         resolve(formatData(stdout));
     });
 })
@@ -58,7 +57,6 @@ const trackActivity = (data) => {
             const output = `${Date.now()}: CPU ${cpu}% | MEM ${memory}% | ${name}`;
 
             process.stdout.write(`\r${output}`);
-            process.stdout.write('\r');
             updateFile(output)
 
             await sleep(100);
