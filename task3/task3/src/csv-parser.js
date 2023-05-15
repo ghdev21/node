@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csvtojson');
 const convertCSVtoTXT = (csvFilePath) => {
-    const outputFolderPath = '../dist'
+    const outputFolderPath = './dist'
     const readStream = fs.createReadStream(csvFilePath, 'utf-8');
 
     if (!fs.existsSync(outputFolderPath)) {

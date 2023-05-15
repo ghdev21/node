@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const {convertCSVtoTXT} = require('./csv-parser')
 
-const xlslDirectoryPath = '../xlsldirectory';
-const csvDirectoryPath = '../csvdirectory';
+const xlslDirectoryPath = './xlsldirectory';
+const csvDirectoryPath = './csvdirectory';
 
 fs.readdir(xlslDirectoryPath, (err, files) => {
     if (err) {
