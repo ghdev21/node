@@ -1,4 +1,4 @@
-import http, {IncomingMessage, ServerResponse} from "http";
+import http from "http";
 import {router} from "./router/Router";
 
 const PORT = 3000;

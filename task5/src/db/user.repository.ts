@@ -1,7 +1,6 @@
 import {IExtendedUser, IUser} from "../types/UserTypes";
 import {USERS_DB} from "./InMemoryDB";
 import {generateId} from "../utils/utils.";
-import {userService} from "../services/user.service";
 
 let userDB = USERS_DB;
 export interface IUserRepository {

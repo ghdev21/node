@@ -7,6 +7,7 @@ interface IUserService {
     getAllUsers(): IExtendedUser[],
     getUserById(id: string): IExtendedUser | undefined,
     deleteUserById(id: string): IExtendedUser | undefined;
+    createUserHobby(id: string, hobbies: IUser["hobbies"]): IUser["hobbies"]
 }
 
 
@@ -37,8 +38,26 @@ class UserService implements IUserService {
         if (!user){
             throw new Error(`Unable to find the user with ID: ${id}`)
         }
-
         return this.userRepository.updateOneById(id, userData);
+    }
+
+    createUserHobby(id: string, hobbies: IUser["hobbies"]): IUser["hobbies"] {
+        const user = this.userRepository.getOneById(id);
+
+        if (!user){
+            throw new Error(`Unable to find the user with ID: ${id}`)
+        }
+        this.userRepository.updateOneById(id, {...user, hobbies});
+
+        return hobbies
+    }
+    deleteUserHobby(id: string ) {
+        const user = this.userRepository.getOneById(id);
+
+        if (!user){
+            throw new Error(`Unable to find the user with ID: ${id}`)
+        }
+        this.userRepository.updateOneById(id, {...user, hobbies: []});
     }
 
     getAllUsers(): IExtendedUser[]{
@@ -62,6 +81,7 @@ class UserService implements IUserService {
             if (user){
                 userRepository.deleteOneById(id)
             }
+
             return user;
         } catch (err){
             throw new Error(`Unable to delete the user with following id: ${id}`)
