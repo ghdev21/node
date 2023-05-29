@@ -14,7 +14,7 @@ const hobbiesSetResolver = async (req: IncomingMessage, res: ServerResponse, id:
             const updatedHobbies = userService.createUserHobby(id, hobbies)
             return responseHandlerJSON(res, HttpStatusCode.CREATED, updatedHobbies)
         } else {
-            return responseHandlerJSON(res, HttpStatusCode.CREATED, invalidFields)
+            return responseHandlerJSON(res, HttpStatusCode.UNPROCESSABLE_ENTITY, invalidFields)
         }
     } catch (err) {
         console.error(err);

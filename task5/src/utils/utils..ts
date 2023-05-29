@@ -53,8 +53,12 @@ const userValidationMapping: IValidationMapping<IUser> = {
 
 const hobbiesValidationMapping: IValidationMapping<IUser> = {
     hobbies: {
-        validationFn: (value: any) => Array.isArray(value) && value.every((item: any) => typeof item === "string"),
-        error: 'Hobbies should contain only string values.',
+        validationFn: (value: string[]):boolean =>
+            Array.isArray(value)
+            && value.length > 0
+            && value.every((item: any) => typeof item === "string")
+        ,
+        error: 'Hobbies should contain only string values',
     },
 }
 
