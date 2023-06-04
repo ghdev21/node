@@ -20,7 +20,6 @@ export const generateId = (length: number = 8): string => {
         const randomIndex = Math.floor(Math.random() * characters.length)
         return acc + characters.charAt(randomIndex)
     }, '');
-
 }
 export const makeUserDTO = (data: IUserResponse): Pick<IUser, 'name' | 'email'> => ({
     name: data.name,
