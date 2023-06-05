@@ -2,6 +2,7 @@ import express, {NextFunction, Request, Response} from "express";
 import {getProducts, getProduct, updateExistingProduct, createNewProduct} from "../product/Product.service";
 import {IExtendedProduct, IProduct} from "../product/types";
 import {validateProductCreation} from "../middlewares/validators/productCreationValidator";
+import {HttpStatusCode} from "./constants";
 
 export const productRouter = express.Router();
 
@@ -20,9 +21,9 @@ productRouter.post('/products', validateProductCreation, async (req: Request<any
         const {body} = req;
         const product = await createNewProduct(body);
         if (product){
-            res.status(201).send(product);
+            res.status(HttpStatusCode.OK).json(product);
         } else{
-            res.status(400).send({error: 'cannot create product'})
+            res.status(HttpStatusCode.BAD_REQUEST).send({error: 'cannot create product'})
         }
     } catch (err){
         next(err)
@@ -34,9 +35,9 @@ productRouter.put('/products/:productId', validateProductCreation, async (req: R
     try {
         const product = await updateExistingProduct(productId, body);
         if (product) {
-            res.status(201).send(product);
+            res.status(HttpStatusCode.CREATED).send(product);
         } else {
-            res.status(400).send({error: 'cannot update product'})
+            res.status(HttpStatusCode.BAD_REQUEST).send({error: 'cannot update product'})
         }
     } catch (err) {
         next(err);
@@ -49,9 +50,9 @@ productRouter.get('/products/:productId', async (req: Request<{ productId: strin
     try {
         const product = await getProduct(productId);
         if (product){
-            res.send(product)
+            res.status(HttpStatusCode.OK).send(product)
         } else {
-            res.status(404).send({error: 'The product is not found'})
+            res.status(HttpStatusCode.NOT_FOUND).send({error: 'The product is not found'})
         }
     } catch (err) {
         next(err)
