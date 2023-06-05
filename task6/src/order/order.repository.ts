@@ -27,7 +27,7 @@ export const createOrder = async (orderData: IOrder) => {
        const res = new OrderModel(orderData);
        const {_id,} = await res.save();
 
-       return {id: _id} ;
+       return {id: _id};
    }catch (err){
        console.error(err);
        throw new Error('unable to create the order, likely card does not exist or empty')

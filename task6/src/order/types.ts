@@ -11,7 +11,6 @@ export interface IDelivery {
 }
 
 export interface ICheckout {
-    userId: string,
     payment: IPayment,
     delivery: IDelivery,
     comments: string
