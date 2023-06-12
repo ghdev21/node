@@ -4,6 +4,7 @@ import { productRouter} from "./router/productRoutes";
 import {cartRouter} from "./router/cartRoutes";
 import bodyParser from "body-parser";
 import {extractUserEmail} from "./middlewares/authorization";
+import {seedProducts} from "./dataload/seed-products";
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     console.log(err, 'here');
@@ -17,6 +18,7 @@ const app = express();
 app.listen(PORT, async () => {
     console.log(`The server has been started on port ${PORT}`);
     await connectToDB(mongodbUrl);
+    await seedProducts();
 })
 
 app.use(express.json())
