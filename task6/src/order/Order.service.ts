@@ -1,6 +1,6 @@
 import {ICheckout} from "./types";
 import {createOrder, replaceKeys,} from "./order.repository";
-import {deleteProfileCart, handleGetCartInfo, makeCartEntity} from "../cart/Cart.service";
+import {deleteProfileCart, makeCartEntity} from "../cart/Cart.service";
 import {IOrder} from "./Order.model";
 import {getExistingCart} from "../cart/Cart.repository";
 

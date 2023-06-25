@@ -7,7 +7,7 @@ import {cartItemSchema, ICartItem} from "../cart/cart-item/CartItem.model";
 export interface IOrder extends ICheckout {
     userId: string;
     items: ICartItem[]
-    cartId: string
+    cartId?: string
     total: number
 }
 
