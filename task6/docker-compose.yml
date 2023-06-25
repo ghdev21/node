@@ -7,13 +7,26 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - mongodb
+      - postgres
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017/mydatabase
-
-  mongodb:
-    image: mongo
+      - POSTGRES_USER=node_gmp
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=node_gmp
     ports:
-      - 27017:27017
+
+      - "5432:5432"
     volumes:
-      - ./db-data:/db
+      - ./database-seed.sql:/docker-entrypoint-initdb.d/database-seed.sql
+  pgadmin-compose:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "password123!"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+

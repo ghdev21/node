@@ -2,7 +2,8 @@ import {model, Schema, Document} from "mongoose";
 import {cartItemSchema, ICartItem} from "./cart-item/CartItem.model";
 
 export interface ICart {
-    id: string;
+    _id?: string;
+    id?: string;
     userId?: string
     items: ICartItem[],
     deleted?: boolean

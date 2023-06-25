@@ -8,7 +8,6 @@ export interface ICartItem {
 }
 
 export interface ICartItemSchema extends ICartItem, Document {}
-
 export const cartItemSchema = new Schema<ICartItemSchema>({
     product: { type: productSchema, required: true },
     count: { type: Number, required: true },

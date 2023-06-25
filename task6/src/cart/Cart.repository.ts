@@ -1,57 +1,75 @@
-import {CartModel, ICart, ICartSchema} from "./Cart.model";
-import {makeProductDTO} from "../product/Product.repository";
-import {IProductSchema} from "../product/Product.model";
-import {CartItemModel} from "./cart-item/CartItem.model";
-import {Document} from "mongoose";
+import {ICart} from "./Cart.model";
+import {ICartItem} from "./cart-item/CartItem.model";
+import {pool} from "../db/RDB-connections";
+import {
+    CREATE_CART_ITEMS_TABLE,
+    CREATE_CART_TABLE, DELETE_CART_QUERY,
+    INSERT_CART_QUERY,
+    SELECT_CART_ITEMS_QUERY,
+    SELECT_CART_QUERY, UPSERT_CART_ITEMS_QUERY
+} from "../queries/cart";
+import {replaceKeys} from "../order/order.repository";
+const getCartItems = async (cartId: string): Promise<ICartItem[]> => {
+    const cartItems = await pool.query(SELECT_CART_ITEMS_QUERY, [cartId]);
 
-export const getProfileCart = async (userIdentity: string): Promise<ICartSchema> => {
+    return cartItems.rows.map(({count, ...product}) => ({product, count}))
+}
+export const getProfileCart = async (userIdentity: string, expectToExists: boolean = false, shouldRewriteId: boolean = true):Promise<ICart> => {
     try {
-       return await getExistingCart(userIdentity) || await createCart(userIdentity)
+        await pool.query(CREATE_CART_TABLE);
+        await pool.query(CREATE_CART_ITEMS_TABLE);
+        const cart = await pool.query(SELECT_CART_QUERY, [userIdentity]);
+        let cartData = cart.rows[0];
+        if (!cart.rows.length && !expectToExists) {
+            const {rows} = await pool.query(INSERT_CART_QUERY, [userIdentity]);
+            cartData = {...rows[0]};
+        }
+        const result = shouldRewriteId ? replaceKeys(cartData, 'id', '_id'): cartData;
+
+        return {...result, items: await getCartItems(cartData.id)};
     } catch (err) {
-        console.log(err);
+        console.error(err);
         throw new Error('Unable initialise cart')
     }
 }
+export const getExistingCart = async (userIdentity: string): Promise<ICart | null> => {
+   try{
+       const cart = await getProfileCart(userIdentity, true, false)
 
-export const getExistingCart = async(userIdentity: string): Promise<ICartSchema | null> => {
-    return await CartModel.findOne({userId: userIdentity, deleted: false}).exec();
-}
+       if(!cart.items.length) {
+           return null
+       }
 
-const createCart = async(userIdentity: string): Promise<ICartSchema> => {
-    return await CartModel.create({items: [], userId: userIdentity, deleted: false});
+       return cart;
+   }catch (err){
+       console.error(err);
+       throw new Error('Cart is empty or does not exist')
+   }
 }
 
 export const updateCart = async ({items, id}: ICart, userId: string): Promise<ICart | null> => {
     try {
-        const cartItems = items.map(({product, count}) => {
-            const {id, ...rest} = product;
-            return new CartItemModel({product: {...rest, _id: id}, count})
-        });
-        const filter = {userId, deleted: false, _id: id} // to be confident the another user is able to update by id
-        const updatedCart = await CartModel.findOneAndUpdate(filter, {items: cartItems}, {new: true});
-        if (updatedCart) {
-            const res = updatedCart?.items.map(({product, count}) => {
-                const productDTO = makeProductDTO(product as IProductSchema);
-                return {product: productDTO, count}
-            }) // omit _id
-            return {items: res, id: updatedCart._id.toString()}
+        const cart = await pool.query(SELECT_CART_QUERY, [userId]);
+        if (!cart.rows) return null;
+
+        const products: ICartItem[] = [];
+        for (const {product, count} of items) {
+            await pool.query(UPSERT_CART_ITEMS_QUERY, [id, product.id, count]);
+            const cartItems = await getCartItems(id!);
+            products.push(...cartItems)
         }
-        return null;
+        return {items: products, id}
+
     } catch (err) {
         console.log(err);
         throw new Error('Invalid id format')
     }
 }
-
-export const deleteCart = (userId: string): Promise<Document | null> => {
+export const deleteCart = async(userId: string): Promise<boolean> => {
     try {
-        return CartModel.findOneAndUpdate(
-            {userId, deleted: false},
-            {
-                deleted: true,
-            },
-            { new: true }
-        ).exec();
+        const res = await pool.query(DELETE_CART_QUERY, [userId]);
+
+        return res?.rows[0]
     } catch (error) {
         throw new Error('Failed to delete cart');
     }

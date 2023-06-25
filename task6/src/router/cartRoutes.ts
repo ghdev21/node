@@ -6,6 +6,7 @@ import {validateUpdateCartStructure} from "../middlewares/validators/updateCartV
 import {makeOrder} from "../order/Order.service";
 import {IOrder} from "../order/Order.model";
 import {HttpStatusCode} from "./constants";
+import {validateProductCreation} from "../middlewares/validators/productCreationValidator";
 
 export const cartRouter = express.Router();
 

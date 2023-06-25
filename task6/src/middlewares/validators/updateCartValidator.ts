@@ -20,12 +20,9 @@ export const validateUpdateCartStructure = (req: Request<any, any, ICart>, res: 
             return res.status(400).json({message: 'Invalid product'});
         }
 
-        const {title, description, price, id: productId} = product;
+        const {id: productId} = product; // it should take data from the db by id
 
         if (
-            !isValidString(title) ||
-            !isValidString(description) ||
-            typeof price !== 'number' || isNaN(price) ||
             !isValidString(productId) ||
             typeof count !== 'number' || count < 0
         ) {
