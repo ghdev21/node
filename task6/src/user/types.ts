@@ -1,4 +1,4 @@
-import {Roles} from "../role/Role.model";
+import {Roles} from '../role/Role.model';
 
 export interface IUser {
     email: string,

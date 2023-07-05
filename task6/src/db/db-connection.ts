@@ -1,13 +1,12 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import {debug} from 'debug';
 
-export const fallback = "mongodb+srv://Andrii:Da8OVCJGJczvXxKP@cluster0.2buqzxf.mongodb.net/?retryWrites=true&w=majority";
-
-export const mongodbUrl = process.env.MONGODB_URI || fallback;
+const debugLogger = debug('my-app:database');
 export const connectToDB = async (mongodbUrl: string) => {
-    try {
-        await mongoose.connect(mongodbUrl);
-        console.log('connected to the db')
-    } catch (err){
-        console.error('Error connecting to MongoDB:', err);
-    }
-}
+	try {
+		await mongoose.connect(mongodbUrl);
+		debugLogger('connected to the db');
+	} catch (err){
+		debugLogger(`Error connecting to MongoDB:${err}`);
+	}
+};
