@@ -17,7 +17,7 @@ const debugLogger = debug('my-app:server');
 
 const {APP_PORT, DB_CONNECTION_URL} = config().parsed!;
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-	debugLogger(`Error occurred:${err}`)
+	debugLogger(`Error occurred:${err}`);
 	res.status(500);
 	res.send({message: err.message});
 };

@@ -7,7 +7,7 @@
     "dev": "nodemon src/app.ts",
     "debug": "DEBUG=my-app:server,my-app:database yarn dev",
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --fix"
   },
   "husky": {
@@ -25,7 +25,7 @@
     "@types/jest": "^29.5.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/mongoose": "^5.11.97",
-    "@types/node": "^20.2.1",
+    "@types/node": "^20.4.0",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "@typescript-eslint/parser": "^5.61.0",
     "eslint": "^8.0.1",
